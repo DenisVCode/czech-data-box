@@ -304,6 +304,37 @@ class ISDSBox {
       throw new Error(error);
     }
   }
+
+  async getReceivedMessages({
+    dmFromTime,
+    dmToTime,
+    dmStatusFilter = -1,
+    dmOffset = 1,
+    dmLimit = 100,
+  }) {
+    console.log('Call GetListOfReceivedMessages');
+    const input = {
+      dmFromTime,
+      dmToTime,
+      dmStatusFilter,
+      dmOffset,
+      dmLimit,
+    };
+    try {
+      const result = await this.infoWS.request(
+        'GetListOfReceivedMessages',
+        input,
+      );
+      if (this.debug === true) {
+        console.log('Raw Result:', result);
+      }
+
+      return result;
+    } catch (error) {
+      console.error('Error in getReceivedMessages:', error.message);
+      throw new Error(error);
+    }
+  }
 }
 
 export default ISDSBox;
