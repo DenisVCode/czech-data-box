@@ -335,6 +335,24 @@ class ISDSBox {
       throw new Error(error);
     }
   }
+
+  async downloadMessage(messageId) {
+    console.log('Call MessageDownload');
+    const input = {
+      dmID: messageId,
+    };
+    try {
+      const result = await this.operationsWS.request('MessageDownload', input);
+      if (this.debug === true) {
+        console.log('Raw Result:', result);
+      }
+
+      return result;
+    } catch (error) {
+      console.error('Error in downloadMessage:', error.message);
+      throw new Error(error);
+    }
+  }
 }
 
 export default ISDSBox;
