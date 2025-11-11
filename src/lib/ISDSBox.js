@@ -135,6 +135,10 @@ class ISDSBox {
         'Search Service URL:',
         getServiceURL(4, this.loginType, this.productionMode),
       );
+      console.log(
+        'VoDZ Service URL:',
+        getServiceURL(5, this.loginType, this.productionMode),
+      );
     }
 
     this.operationsWS = new ISDSSoapClient(getServiceWSDL(0), {
@@ -181,6 +185,16 @@ class ISDSBox {
       login: this.loginName,
       password: this.password,
       location: getServiceURL(4, this.loginType, this.productionMode),
+      loginType: this.loginType,
+      privateKey: this.privateKey,
+      publicKey: this.publicKey,
+      passPhrase: this.passPhrase,
+      debug: this.debug,
+    });
+    this.vodzWS = new ISDSSoapClient(getServiceWSDL(5), {
+      login: this.loginName,
+      password: this.password,
+      location: getServiceURL(5, this.loginType, this.productionMode),
       loginType: this.loginType,
       privateKey: this.privateKey,
       publicKey: this.publicKey,
@@ -350,6 +364,24 @@ class ISDSBox {
       return result;
     } catch (error) {
       console.error('Error in downloadMessage:', error.message);
+      throw new Error(error);
+    }
+  }
+
+  async downloadBigMessage(messageId) {
+    console.log('Call BigMessageDownload');
+    const input = {
+      dmID: messageId,
+    };
+    try {
+      const result = await this.vodzWS.request('BigMessageDownload', input);
+      if (this.debug === true) {
+        console.log('Raw Result:', result);
+      }
+
+      return result;
+    } catch (error) {
+      console.error('Error in downloadBigMessage:', error.message);
       throw new Error(error);
     }
   }

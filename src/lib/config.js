@@ -5,7 +5,7 @@ import path from 'path';
 export const DEBUG = false; // Set to true to enable debug mode globally
 
 function getServiceURL(serviceType, loginType, productionMode) {
-  let baseURL = 'https://ws1';
+  let baseURL = serviceType === 5 ? 'https://ws2' : 'https://ws1';
   if (loginType !== 0) {
     baseURL += 'c';
   }
@@ -28,11 +28,12 @@ function getServiceURL(serviceType, loginType, productionMode) {
     case 1:
       return `${baseURL}dx`;
     case 2:
-      return `${baseURL}DsManage`;
     case 3:
       return `${baseURL}DsManage`;
     case 4:
       return `${baseURL}df`;
+    case 5:
+      return `${baseURL}vodz`;
     default:
       throw new Error('Invalid service type');
   }
@@ -63,6 +64,8 @@ function getServiceWSDL(serviceType) {
       return path.join(directory, 'db_access.wsdl');
     case 4:
       return path.join(directory, 'db_search.wsdl');
+    case 5:
+      return path.join(directory, 'dm_VoDZ.wsdl');
     default:
       throw new Error('Invalid service type');
   }
