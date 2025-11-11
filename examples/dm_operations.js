@@ -1,20 +1,27 @@
+import 'dotenv/config';
 import ISDSBox from '../src/lib/ISDSBox.js';
 import DataMessage from '../src/models/DataMessage.js';
 
 // Replace these with actual values
-const loginname = '';
-const password = '';
+const loginname = process.env.ISDS_LOGINNAME;
+const password = process.env.ISDS_PASSWORD;
 
 async function createDataMessage() {
   const isdsBox = new ISDSBox().loginWithUsernameAndPassword(
     loginname,
     password,
-    false,
+    true,
   ); // Set to true for production environment
+
+  console.log('Logged in');
+  console.log(isdsBox);
+
+  const ownerInfo = await isdsBox.getOwnerInfoFromLogin();
+  console.log(ownerInfo);
 
   const dataMessageFiles = [
     {
-      dmFilePath: './communication_test.pdf',
+      dmFilePath: '../test/communication_test.pdf',
       dmMimeType: 'application/pdf',
       dmFileMetaType: 'main',
       dmFileDescr: 'file1.pdf',
@@ -24,7 +31,7 @@ async function createDataMessage() {
   const dataMessage = new DataMessage({
     dmSenderOrgUnit: null, // null
     dmSenderOrgUnitNum: null, // null
-    dbIDRecipient: '', // ID datové schránky příjemce - povinný
+    dbIDRecipient: 'kdrgzra', // ID datové schránky příjemce - povinný
     dmRecipientOrgUnit: null, // null
     dmRecipientOrgUnitNum: null, // null
     dmToHands: 'ISS Europe', // textové pole k rukám
@@ -54,5 +61,10 @@ async function createDataMessage() {
   }
 }
 
-const messageId = await createDataMessage();
-console.log(messageId);
+try {
+  const messageId = await createDataMessage();
+  console.log(messageId);
+} catch (error) {
+  console.error('Error:', error);
+  console.error(JSON.stringify(error, null, 2));
+}

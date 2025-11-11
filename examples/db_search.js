@@ -1,9 +1,10 @@
+import 'dotenv/config';
 import ISDSBox from '../src/lib/ISDSBox.js';
 import DataBox from '../src/models/DataBox.js';
 
 // Replace these with actual values
-const loginname = '';
-const password = '';
+const loginname = process.env.ISDS_LOGINNAME;
+const password = process.env.ISDS_PASSWORD;
 
 async function searchDataBoxInfo() {
   const isdsBox = new ISDSBox().loginWithUsernameAndPassword(
